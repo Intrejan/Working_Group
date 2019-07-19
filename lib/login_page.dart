@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:working_group/register_page.dart';
 
+import 'home_page.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -75,8 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => new RegisterPage())
-                );
+                        builder: (context) => new RegisterPage()));
               },
             ),
           ],
@@ -95,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
               icon: Icon(item['icon'],
                   color: Theme.of(context).iconTheme.color),
               onPressed: () {
-                //TODO : 第三方登录方法
+               //TODO Other Ways
                 Scaffold.of(context).showSnackBar(new SnackBar(
                   content: new Text("${item['title']}登录"),
                   action: new SnackBarAction(
@@ -134,7 +135,10 @@ class _LoginPageState extends State<LoginPage> {
             if (_formKey.currentState.validate()) {
               ///只有输入的内容符合要求通过才会到达此处
               _formKey.currentState.save();
-              //TODO 执行登录方法
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => new Homepage()));
               print('email:$_email , assword:$_password');
             }
           },

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'home_page.dart';
+
 class RegisterPage extends StatefulWidget{
   @override
   _RegisterState createState() =>_RegisterState();
@@ -9,35 +11,44 @@ class RegisterPage extends StatefulWidget{
 class _RegisterState extends State<RegisterPage> {
 
   final _formKey = GlobalKey<FormState>();
+  // ignore: non_constant_identifier_names
   String _email, _password,_password_confirm;
   bool _isObscure = true;
   Color _eyeColor;
-
+  TextEditingController _controllerMail = new TextEditingController();
+  TextEditingController _controllerPwd = new TextEditingController();
+  TextEditingController _controllerRePwd = new TextEditingController();
+  void _userRegister() {
+      _email=_controllerMail.text;
+      _password=_controllerPwd.text;
+      _password_confirm=_controllerRePwd.text;
+  }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      body: Form(
-          key: _formKey,
-          child:ListView(
-            padding: EdgeInsets.symmetric(horizontal: 22.0),
-            children: <Widget>[
-              SizedBox(
-                height: kToolbarHeight,
-              ),
-              buildTitle(),
-              buildTitleLine(),
-              SizedBox(height: 40.0),
-              buildEmailTextField(),
-              SizedBox(height: 25.0),
-              buildPasswordTextField(context),
-              SizedBox(height: 25.0),
-              bulidConfirmTextField(context),
-              SizedBox(height: 60.0,),
-              buildRegisterButton(context),
-              SizedBox(height: 20.0),
-            ],
-          )
-      )
+        body: Form(
+            key: _formKey,
+            child:ListView(
+              padding: EdgeInsets.symmetric(horizontal: 22.0),
+              children: <Widget>[
+                SizedBox(
+                  height: kToolbarHeight,
+                ),
+                buildTitle(),
+                buildTitleLine(),
+                SizedBox(height: 40.0),
+                buildEmailTextField(),
+                SizedBox(height: 25.0),
+                buildPasswordTextField(context),
+                SizedBox(height: 25.0),
+                bulidConfirmTextField(context),
+                SizedBox(height: 60.0,),
+                buildRegisterButton(context),
+                SizedBox(height: 20.0),
+              ],
+            )
+        )
 
     );
   }
@@ -68,6 +79,7 @@ class _RegisterState extends State<RegisterPage> {
 
   TextFormField buildEmailTextField() {
     return TextFormField(
+      controller: _controllerMail,
       decoration: InputDecoration(
         labelText: 'Emall Address',
       ),
@@ -77,7 +89,7 @@ class _RegisterState extends State<RegisterPage> {
         if (!emailReg.hasMatch(value)) {
           return '请输入正确的邮箱地址';
         }else{
-          return 'error';
+          return null;
         }
       },
       onSaved: (String value) => _email = value,
@@ -86,17 +98,51 @@ class _RegisterState extends State<RegisterPage> {
 
   TextFormField buildPasswordTextField(BuildContext context) {
     return TextFormField(
+      controller: _controllerPwd,
       onSaved: (String value) => _password = value,
       obscureText: _isObscure,
       validator: (String value) {
         if (value.isEmpty) {
           return '请输入密码';
         }else{
-          return 'error';
+          return null;
         }
       },
       decoration: InputDecoration(
           labelText: 'Password',
+          suffixIcon: IconButton(
+              icon: Icon(
+                Icons.remove_red_eye,
+                color: _eyeColor,
+              ),
+              onPressed: () {
+                setState(() {
+                  _isObscure = !_isObscure;
+                  _eyeColor = _isObscure
+                      ? Colors.grey
+                      : Theme.of(context).iconTheme.color;
+                });
+              })),
+    );
+  }
+
+  TextFormField bulidConfirmTextField(BuildContext context) {
+    return TextFormField(
+      controller: _controllerRePwd,
+      onSaved: (String value) => _password_confirm = value,
+      obscureText: _isObscure,
+      validator: (String value) {
+        if (value.isEmpty) {
+          return '请确认密码';
+        }else if (value != _password){
+          return '两次密码不一致！';
+        }
+        else{
+          return null;
+        }
+      },
+      decoration: InputDecoration(
+          labelText: 'Confirm',
           suffixIcon: IconButton(
               icon: Icon(
                 Icons.remove_red_eye,
@@ -125,11 +171,15 @@ class _RegisterState extends State<RegisterPage> {
           ),
           color: Colors.black,
           onPressed: () {
+            _userRegister();
+            debugPrint('email:$_email , assword:$_password_confirm');
             if (_formKey.currentState.validate()) {
               ///只有输入的内容符合要求通过才会到达此处
               _formKey.currentState.save();
-              //TODO 执行登录方法
-              print('email:$_email , assword:$_password');
+//              Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                      builder: (context) => new Homepage()));
             }
           },
           shape: StadiumBorder(side: BorderSide()),
@@ -138,33 +188,7 @@ class _RegisterState extends State<RegisterPage> {
     );
   }
 
-  TextFormField bulidConfirmTextField(BuildContext context) {
-    return TextFormField(
-      onSaved: (String value) => _password_confirm = value,
-      obscureText: _isObscure,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return '请确认密码';
-        }else{
-          return '';
-        }
-      },
-      decoration: InputDecoration(
-          labelText: 'Confirm',
-          suffixIcon: IconButton(
-              icon: Icon(
-                Icons.remove_red_eye,
-                color: _eyeColor,
-              ),
-              onPressed: () {
-                setState(() {
-                  _isObscure = !_isObscure;
-                  _eyeColor = _isObscure
-                      ? Colors.grey
-                      : Theme.of(context).iconTheme.color;
-                });
-              })),
-    );
-  }
-}
 
+
+
+}
