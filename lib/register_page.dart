@@ -187,8 +187,4 @@ class _RegisterState extends State<RegisterPage> {
       ),
     );
   }
-
-
-
-
 }
