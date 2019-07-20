@@ -18,18 +18,9 @@ class _LoginPageState extends State<LoginPage> {
   bool _isObscure = true;
   Color _eyeColor;
   List _loginMethod = [
-    {
-      "title": "facebook",
-      "icon": GroovinMaterialIcons.facebook,
-    },
-    {
-      "title": "google",
-      "icon": GroovinMaterialIcons.google,
-    },
-    {
-      "title": "twitter",
-      "icon": GroovinMaterialIcons.twitter,
-    },
+    {"title": "facebook", "icon": GroovinMaterialIcons.facebook,},
+    {"title": "google", "icon": GroovinMaterialIcons.google,},
+    {"title": "twitter", "icon": GroovinMaterialIcons.twitter,},
   ];
 
   @override
@@ -229,14 +220,6 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () {
             _formKey.currentState.save();//保存当前的输入值
             getPwd(_email);//获得当前账号的密码
-            print(_isMatch);
-            if (_formKey.currentState.validate()&&_isMatch) {
-              print("yes");
-//              Navigator.push(
-//                  context,
-//                  MaterialPageRoute(
-//                      builder: (context) => new Homepage()));
-            }
           },
           shape: StadiumBorder(side: BorderSide()),
         ),
@@ -247,12 +230,25 @@ class _LoginPageState extends State<LoginPage> {
   getPwd(String userEmail) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _passwordRe=prefs.get(userEmail);
+    print(_passwordRe);
     await check(_password,_passwordRe);
+    await login();
   }
 
   check(String password, String passwordRe) {
-    if (_password == _passwordRe){_isMatch = true;}
+    //print("input:$password,password:$_passwordRe");
+    if (password == passwordRe){_isMatch = true;}
     else{_isMatch = false;}
+
+  }
+
+  login(){
+    if (_formKey.currentState.validate()&&_isMatch) {
+//              Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                      builder: (context) => new Homepage()));
+    }
   }
 }
 
