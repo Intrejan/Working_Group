@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:working_group/register_page.dart';
 
 import 'home_page.dart';
@@ -13,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String _email, _password;
+  bool _isMatch =false;
   bool _isObscure = true;
   Color _eyeColor;
   List _loginMethod = [
@@ -46,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 40.0),
                 buildEmailTextField(),
                 SizedBox(height: 25.0),
+
                 buildPasswordTextField(context),
                 buildForgetPasswordText(context),
                 SizedBox(height: 25.0),
@@ -132,14 +135,13 @@ class _LoginPageState extends State<LoginPage> {
           ),
           color: Colors.black,
           onPressed: () {
-            if (_formKey.currentState.validate()) {
-              ///只有输入的内容符合要求通过才会到达此处
+            get(_email);
+            if (_formKey.currentState.validate()&&_isMatch) {
               _formKey.currentState.save();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => new Homepage()));
-              print('email:$_email , assword:$_password');
+//              Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                      builder: (context) => new Homepage()));
             }
           },
           shape: StadiumBorder(side: BorderSide()),
@@ -159,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(fontSize: 14.0, color: Colors.grey),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            //Navigator.pop(context);
           },
         ),
       ),
@@ -170,13 +172,6 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       onSaved: (String value) => _password = value,
       obscureText: _isObscure,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return '请输入密码';
-        }else{
-          return 'error';
-        }
-      },
       decoration: InputDecoration(
           labelText: 'Password',
           suffixIcon: IconButton(
@@ -192,6 +187,17 @@ class _LoginPageState extends State<LoginPage> {
                       : Theme.of(context).iconTheme.color;
                 });
               })),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return '请输入密码';
+        }else if(!_isMatch){
+          return "密码错误！";
+        }else{
+          return null;
+        }
+      },
+
+
     );
   }
 
@@ -206,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
         if (!emailReg.hasMatch(value)) {
           return '请输入正确的邮箱地址';
         }else{
-          return 'error';
+          return null;
         }
       },
       onSaved: (String value) => _email = value,
@@ -236,4 +242,16 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  get(String userEmail) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(_password);
+    print(prefs.get(userEmail));
+    if (_password == prefs.get(userEmail)){
+      _isMatch = true;
+    }else{
+      _isMatch = false;
+    }
+  }
 }
+

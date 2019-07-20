@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget{
   @override
@@ -174,17 +174,18 @@ class _RegisterState extends State<RegisterPage> {
             _userRegister();
             debugPrint('email:$_email , assword:$_password_confirm');
             if (_formKey.currentState.validate()) {
-              ///只有输入的内容符合要求通过才会到达此处
               _formKey.currentState.save();
-//              Navigator.push(
-//                  context,
-//                  MaterialPageRoute(
-//                      builder: (context) => new Homepage()));
+              save();
+              Navigator.pop(context);
             }
           },
           shape: StadiumBorder(side: BorderSide()),
         ),
       ),
     );
+  }
+  save() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(_email,_password);
   }
 }
