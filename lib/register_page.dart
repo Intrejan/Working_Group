@@ -21,6 +21,11 @@ class _RegisterState extends State<RegisterPage> {
       _email=_controllerMail.text;
       _password=_controllerPwd.text;
       _password_confirm=_controllerRePwd.text;
+
+      if (_formKey.currentState.validate()) {
+        save();
+        Navigator.pop(context,[_email]);
+      }
   }
   @override
   Widget build(BuildContext context) {
@@ -171,11 +176,6 @@ class _RegisterState extends State<RegisterPage> {
           color: Colors.black,
           onPressed: () {
             _userRegister();
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
-              save();
-              Navigator.pop(context);
-            }
           },
           shape: StadiumBorder(side: BorderSide()),
         ),

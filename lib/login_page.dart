@@ -6,14 +6,17 @@ import 'package:working_group/register_page.dart';
 
 import 'home_page.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  String _email, _password,_passwordRe;
+  String _email="";
+  String  _password,_passwordRe;
   bool _isMatch =false;
   bool _isObscure = true;
   Color _eyeColor;
@@ -67,16 +70,22 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(color: Colors.green),
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => new RegisterPage()));
+                _toRegisterPage(context);//跳转注册页面方法。
               },
             ),
           ],
         ),
       ),
     );
+  }
+
+  _toRegisterPage(BuildContext context) async{
+      final preEmail = await Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => new RegisterPage()));
+      _email=new Text("$preEmail").data;
+      _email = _email.substring(1,_email.length-1);//获得已注册的用户邮箱
   }
 
   ButtonBar buildOtherMethod(BuildContext context) {
@@ -136,6 +145,7 @@ class _LoginPageState extends State<LoginPage> {
       onSaved: (String value) => _password = value,
       obscureText: _isObscure,
       decoration: InputDecoration(
+
           labelText: 'Password',
           suffixIcon: IconButton(
               icon: Icon(
@@ -151,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                 });
               })),
       validator: (String value) {
-        if (value.isEmpty) {
+        if (value.isEmpty || value.length==0) {
           return '请输入密码';
         }else if(!_isMatch){
           return "密码错误！";
@@ -167,8 +177,14 @@ class _LoginPageState extends State<LoginPage> {
   TextFormField buildEmailTextField() {
     return TextFormField(
       decoration: InputDecoration(
-        labelText: 'Emall Address',
+        labelText: 'Email Address',
+
       ),
+      controller: TextEditingController.fromValue(
+        TextEditingValue(
+            text: _email
+        )
+    ),
       validator: (String value) {
         var emailReg = RegExp(
             r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
@@ -230,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
   getPwd(String userEmail) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _passwordRe=prefs.get(userEmail);
-    print(_passwordRe);
+    //print(_passwordRe);
     await check(_password,_passwordRe);
     await login();
   }
@@ -250,5 +266,6 @@ class _LoginPageState extends State<LoginPage> {
 //                      builder: (context) => new Homepage()));
     }
   }
+
 }
 
