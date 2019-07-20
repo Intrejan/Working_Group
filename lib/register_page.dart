@@ -171,7 +171,6 @@ class _RegisterState extends State<RegisterPage> {
           color: Colors.black,
           onPressed: () {
             _userRegister();
-            debugPrint('email:$_email , password:$_password_confirm');
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
               save();

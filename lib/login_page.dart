@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  String _email, _password;
+  String _email, _password,_passwordRe;
   bool _isMatch =false;
   bool _isObscure = true;
   Color _eyeColor;
@@ -48,7 +48,6 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 40.0),
                 buildEmailTextField(),
                 SizedBox(height: 25.0),
-
                 buildPasswordTextField(context),
                 buildForgetPasswordText(context),
                 SizedBox(height: 25.0),
@@ -121,34 +120,6 @@ class _LoginPageState extends State<LoginPage> {
           '其他账号登录',
           style: TextStyle(color: Colors.grey, fontSize: 14.0),
         ));
-  }
-
-  Align buildLoginButton(BuildContext context) {
-    return Align(
-      child: SizedBox(
-        height: 45.0,
-        width: 270.0,
-        child: RaisedButton(
-          child: Text(
-            'Login',
-            style: Theme.of(context).primaryTextTheme.headline,
-          ),
-          color: Colors.black,
-          onPressed: () {
-            get(_email);
-            _formKey.currentState.save();
-            if (_formKey.currentState.validate()&&_isMatch) {
-              print("yes");
-//              Navigator.push(
-//                  context,
-//                  MaterialPageRoute(
-//                      builder: (context) => new Homepage()));
-            }
-          },
-          shape: StadiumBorder(side: BorderSide()),
-        ),
-      ),
-    );
   }
 
   Padding buildForgetPasswordText(BuildContext context) {
@@ -244,15 +215,44 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  get(String userEmail) async {
+  Align buildLoginButton(BuildContext context) {
+    return Align(
+      child: SizedBox(
+        height: 45.0,
+        width: 270.0,
+        child: RaisedButton(
+          child: Text(
+            'Login',
+            style: Theme.of(context).primaryTextTheme.headline,
+          ),
+          color: Colors.black,
+          onPressed: () {
+            _formKey.currentState.save();//保存当前的输入值
+            getPwd(_email);//获得当前账号的密码
+            print(_isMatch);
+            if (_formKey.currentState.validate()&&_isMatch) {
+              print("yes");
+//              Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                      builder: (context) => new Homepage()));
+            }
+          },
+          shape: StadiumBorder(side: BorderSide()),
+        ),
+      ),
+    );
+  }
+
+  getPwd(String userEmail) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _pwd = prefs.get(userEmail);
-    print('input:$_password,password:$_pwd');
-    if (_password == prefs.get(userEmail)){
-      _isMatch = true;
-    }else{
-      _isMatch = false;
-    }
+    _passwordRe=prefs.get(userEmail);
+    await check(_password,_passwordRe);
+  }
+
+  check(String password, String passwordRe) {
+    if (_password == _passwordRe){_isMatch = true;}
+    else{_isMatch = false;}
   }
 }
 
