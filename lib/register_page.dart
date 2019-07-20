@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget{
   @override
@@ -172,7 +171,7 @@ class _RegisterState extends State<RegisterPage> {
           color: Colors.black,
           onPressed: () {
             _userRegister();
-            debugPrint('email:$_email , assword:$_password_confirm');
+            debugPrint('email:$_email , password:$_password_confirm');
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
               save();
@@ -185,7 +184,7 @@ class _RegisterState extends State<RegisterPage> {
     );
   }
   save() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     prefs.setString(_email,_password);
   }
 }

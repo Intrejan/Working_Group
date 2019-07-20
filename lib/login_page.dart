@@ -136,8 +136,9 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.black,
           onPressed: () {
             get(_email);
+            _formKey.currentState.save();
             if (_formKey.currentState.validate()&&_isMatch) {
-              _formKey.currentState.save();
+              print("yes");
 //              Navigator.push(
 //                  context,
 //                  MaterialPageRoute(
@@ -245,8 +246,8 @@ class _LoginPageState extends State<LoginPage> {
 
   get(String userEmail) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(_password);
-    print(prefs.get(userEmail));
+    String _pwd = prefs.get(userEmail);
+    print('input:$_password,password:$_pwd');
     if (_password == prefs.get(userEmail)){
       _isMatch = true;
     }else{
