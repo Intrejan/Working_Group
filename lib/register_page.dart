@@ -17,6 +17,7 @@ class _RegisterState extends State<RegisterPage> {
   TextEditingController _controllerMail = new TextEditingController();
   TextEditingController _controllerPwd = new TextEditingController();
   TextEditingController _controllerRePwd = new TextEditingController();
+
   void _userRegister() {
       _email=_controllerMail.text;
       _password=_controllerPwd.text;
@@ -27,6 +28,7 @@ class _RegisterState extends State<RegisterPage> {
         Navigator.pop(context,[_email]);
       }
   }
+
   @override
   Widget build(BuildContext context) {
 
@@ -182,8 +184,10 @@ class _RegisterState extends State<RegisterPage> {
       ),
     );
   }
+
   save() async{
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(_email,_password);
   }
+
 }

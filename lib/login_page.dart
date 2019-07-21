@@ -260,10 +260,10 @@ class _LoginPageState extends State<LoginPage> {
 
   login(){
     if (_formKey.currentState.validate()&&_isMatch) {
-//              Navigator.push(
-//                  context,
-//                  MaterialPageRoute(
-//                      builder: (context) => new Homepage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => new Homepage()));
     }
   }
 
