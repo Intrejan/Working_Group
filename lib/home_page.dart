@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'group_screen.dart';
-import 'home_screen.dart';
-import 'news_screen.dart';
+import 'package:working_group/screen/groupScreen/group_screen.dart';
+import 'package:working_group/screen/home_screen.dart';
+import 'package:working_group/screen/news_screen.dart';
+import 'package:working_group/user_drawer.dart';
 class NavigationIconView {
   NavigationIconView({
     Widget icon,
@@ -71,9 +72,14 @@ class Homepage extends StatefulWidget{
 
 class _HomePageState extends State<Homepage> with TickerProviderStateMixin {
   int _currentIndex = 0;
+
   BottomNavigationBarType _type = BottomNavigationBarType.shifting;
   List<NavigationIconView> _navigationViews;
   List<Widget> list = List();
+  List<String> tilTes = ["Home","Group","News"];
+  TabController _tabController; //需要定义一个Controller
+  List tabs = ["Owned Group", "Joined Group","Passed Group"];
+
   @override
   void initState(){
     super.initState();
@@ -100,6 +106,8 @@ class _HomePageState extends State<Homepage> with TickerProviderStateMixin {
       ),
     ];
     _navigationViews[_currentIndex].controller.value = 1.0;
+
+    _tabController = TabController(length: tabs.length, vsync:this);
   }
 
   @override
@@ -126,12 +134,73 @@ class _HomePageState extends State<Homepage> with TickerProviderStateMixin {
         });
       },
     );
+
+    if(_currentIndex==1) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: new Container(
+            margin: EdgeInsets.only(top: 3, left: 3,right: 3,bottom: 3),//容器补白
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                  image: new ExactAssetImage('assets/images/user.png'),
+                  fit: BoxFit.cover
+              ),
+            ),
+          ),
+          centerTitle: true,
+          title: Text("Group"),
+          bottom: TabBar(
+              controller: _tabController,
+              tabs: tabs.map((e) => Tab(text: e)).toList()
+          ),
+          actions: <Widget>[ //导航栏右侧菜单
+            IconButton(icon: Icon(Icons.mail_outline),
+                onPressed: () {
+
+                }),
+          ],
+        ),
+
+        body:TabBarView(
+          controller: _tabController,
+          children: tabs.map((e) { //创建3个Tab页
+            return Container(
+              child: GroupScreen(),
+            );
+          }).toList(),
+        ) ,
+        bottomNavigationBar: botNavBar,
+        drawer: UserDrawerPage(),
+      );
+    }
+
     return Scaffold(
+      appBar: new AppBar(
+        leading: new Container(
+          margin: EdgeInsets.only(top: 3, left: 3,right: 3,bottom: 3),//容器补白
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+                image: new ExactAssetImage('assets/images/user.png'),
+                fit: BoxFit.cover
+            ),
+          ),
+        ),
+        centerTitle: true,
+        title: Text(tilTes[_currentIndex]),
+        actions: <Widget>[
+          new IconButton(
+              icon: new Icon(Icons.mail_outline),
+              onPressed: () {
+              })
+        ],
+      ),
       body: list[_currentIndex],
-
       bottomNavigationBar: botNavBar,
-    );
+      drawer: UserDrawerPage(),
 
+    );
   }
 }
 

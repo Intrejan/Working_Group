@@ -6,12 +6,13 @@ class GroupScreen extends StatefulWidget {
 }
 
 class GroupScreenState extends State<GroupScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Group'),
-      ),
+
     );
   }
 }
+
+

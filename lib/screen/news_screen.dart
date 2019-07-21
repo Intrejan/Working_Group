@@ -8,10 +8,8 @@ class NewsScreen extends StatefulWidget {
 class NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('News'),
-      ),
+    return new Scaffold(
+
     );
   }
 }
