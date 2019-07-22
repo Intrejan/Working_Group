@@ -4,8 +4,6 @@ import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:working_group/register_page.dart';
 
-import 'home_page.dart';
-
 // ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
 
@@ -16,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String _email="";
+  bool isFromRegister = false;
   String  _password,_passwordRe;
   bool _isMatch =false;
   bool _isObscure = true;
@@ -70,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(color: Colors.green),
               ),
               onTap: () {
+                isFromRegister = true;
                 _toRegisterPage(context);//跳转注册页面方法。
               },
             ),
@@ -98,7 +98,6 @@ class _LoginPageState extends State<LoginPage> {
               icon: Icon(item['icon'],
                   color: Theme.of(context).iconTheme.color),
               onPressed: () {
-               //TODO Other Ways
                 Scaffold.of(context).showSnackBar(new SnackBar(
                   content: new Text("${item['title']}登录"),
                   action: new SnackBarAction(
@@ -175,27 +174,47 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   TextFormField buildEmailTextField() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Email Address',
+    if(isFromRegister){
+      return TextFormField(
+        decoration: InputDecoration(
+          labelText: 'Email Address',
 
-      ),
+        ),
       controller: TextEditingController.fromValue(
         TextEditingValue(
             text: _email
         )
     ),
-      validator: (String value) {
-        var emailReg = RegExp(
-            r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
-        if (!emailReg.hasMatch(value)) {
-          return '请输入正确的邮箱地址';
-        }else{
-          return null;
-        }
-      },
-      onSaved: (String value) => _email = value,
-    );
+        validator: (String value) {
+          var emailReg = RegExp(
+              r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
+          if (!emailReg.hasMatch(value)) {
+            return '请输入正确的邮箱地址';
+          }else{
+            return null;
+          }
+        },
+        onSaved: (String value) => _email = value,
+      );
+    }
+    else{
+      return TextFormField(
+        decoration: InputDecoration(
+          labelText: 'Email Address',
+
+        ),
+        validator: (String value) {
+          var emailReg = RegExp(
+              r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
+          if (!emailReg.hasMatch(value)) {
+            return '请输入正确的邮箱地址';
+          }else{
+            return null;
+          }
+        },
+        onSaved: (String value) => _email = value,
+      );
+    }
   }
 
   Padding buildTitleLine() {
@@ -235,6 +254,7 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.black,
           onPressed: () {
             _formKey.currentState.save();//保存当前的输入值
+            //print(_email);
             getPwd(_email);//获得当前账号的密码
           },
           shape: StadiumBorder(side: BorderSide()),
@@ -259,11 +279,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   login(){
+    //print(_email);
     if (_formKey.currentState.validate()&&_isMatch) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => new Homepage()));
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                "HomePage",
+                    (route) => route == null,//移除登陆页面
+                arguments:_email,
+
+              );
     }
   }
 

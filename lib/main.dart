@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:working_group/register_page.dart';
-
-import 'package:working_group/screen/groupScreen/group_screen.dart';
 import 'login_page.dart';
-
+import 'home_page.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -14,7 +12,7 @@ class MyApp extends StatelessWidget {
         routes:{
           "LoginPage":(context)=>LoginPage(),
           "RegisterPage":(context)=>RegisterPage(),
-          "GroupScreen":(context)=>GroupScreen(),
+          "HomePage":(context)=>Homepage(),
         },
         debugShowCheckedModeBanner: false,
       home: LoginPage()

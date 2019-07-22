@@ -12,9 +12,7 @@ class NavigationIconView {
     String title,
     Color color,
     TickerProvider vsync,
-  }) : _icon = icon,
-        _color = color,
-        _title = title,
+  }) :
         item = BottomNavigationBarItem(
           icon: icon,
           activeIcon: activeIcon,
@@ -23,45 +21,10 @@ class NavigationIconView {
         controller = AnimationController(
           duration: kThemeAnimationDuration,
           vsync: vsync,
-        ) {
-    _animation = controller.drive(CurveTween(
-      curve: const Interval(0.5, 1.0, curve: Curves.fastOutSlowIn),
-    ));
-  }
+        );
 
-  final Widget _icon;
-  final Color _color;
-  final String _title;
   final BottomNavigationBarItem item;
   final AnimationController controller;
-  Animation<double> _animation;
-
-  FadeTransition transition(BuildContext context) {
-    Color iconColor;
-    iconColor = _color;
-
-    return FadeTransition(
-      opacity: _animation,
-      child: SlideTransition(
-        position: _animation.drive(
-          Tween<Offset>(
-            begin: const Offset(0.0, 0.02), // Slightly down.
-            end: Offset.zero,
-          ),
-        ),
-        child: IconTheme(
-          data: IconThemeData(
-            color: iconColor,
-            size: 120.0,
-          ),
-          child: Semantics(
-            label: 'Placeholder for $_title tab',
-            child: _icon,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class Homepage extends StatefulWidget{
@@ -71,14 +34,15 @@ class Homepage extends StatefulWidget{
 }
 
 class _HomePageState extends State<Homepage> with TickerProviderStateMixin {
-  int _currentIndex = 0;
 
+  int _currentIndex = 0;
   BottomNavigationBarType _type = BottomNavigationBarType.shifting;
   List<NavigationIconView> _navigationViews;
   List<Widget> list = List();
   List<String> tilTes = ["Home","Group","News"];
   TabController _tabController; //需要定义一个Controller
-  List tabs = ["Owned Group", "Joined Group","Passed Group"];
+  List<String> tabs = ["Owned Group", "Joined Group","Passed Group"];
+  String userEmail;
 
   @override
   void initState(){
@@ -119,6 +83,10 @@ class _HomePageState extends State<Homepage> with TickerProviderStateMixin {
 
   @override
    Widget build(BuildContext context) {
+
+    userEmail=ModalRoute.of(context).settings.arguments;
+    //print(userEmail);
+
     final BottomNavigationBar botNavBar = BottomNavigationBar(
       items: _navigationViews
           .map<BottomNavigationBarItem>((NavigationIconView navigationView) => navigationView.item)
@@ -128,9 +96,7 @@ class _HomePageState extends State<Homepage> with TickerProviderStateMixin {
       type: _type,
       onTap: (int index) {
         setState(() {
-          _navigationViews[_currentIndex].controller.reverse();
           _currentIndex = index;
-          _navigationViews[_currentIndex].controller.forward();
         });
       },
     );
@@ -171,10 +137,9 @@ class _HomePageState extends State<Homepage> with TickerProviderStateMixin {
           }).toList(),
         ) ,
         bottomNavigationBar: botNavBar,
-        drawer: UserDrawerPage(),
+        drawer: UserDrawerPage(userEmail),
       );
     }
-
     return Scaffold(
       appBar: new AppBar(
         leading: new Container(
@@ -198,8 +163,7 @@ class _HomePageState extends State<Homepage> with TickerProviderStateMixin {
       ),
       body: list[_currentIndex],
       bottomNavigationBar: botNavBar,
-      drawer: UserDrawerPage(),
-
+      drawer: UserDrawerPage(userEmail),
     );
   }
 }
