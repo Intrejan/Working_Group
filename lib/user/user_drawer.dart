@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'login_page.dart';
+import 'package:working_group/user/login_page.dart';
 
 class UserDrawerPage extends StatefulWidget{
   UserDrawerPage(this.userEmail);
@@ -100,8 +100,8 @@ class UserDrawerPage extends StatefulWidget{
               radius: 18,
             ),
             onTap: () {
-
               Navigator.pop(context);
+              Navigator.pushNamed(context, "Partners");
             },
           ),
           ListTile(title: Text('History'),

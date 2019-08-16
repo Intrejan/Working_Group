@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:working_group/register_page.dart';
+import 'package:working_group/user/register_page.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
