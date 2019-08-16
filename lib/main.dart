@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:working_group/chat.dart';
+import 'package:working_group/selfpage.dart';
 import 'package:working_group/user/register_page.dart';
 import 'package:working_group/user/login_page.dart';
 import 'partners.dart';
@@ -18,6 +20,8 @@ class MyApp extends StatelessWidget {
           "HomePage":(context)=>Homepage(),
           "MessagePage":(context)=>MessagePage(),
           "Partners":(context)=>Partners(),
+          "SelfPage":(context)=>SelfPage(),
+          "Chat":(context)=>Chat(),
         },
         debugShowCheckedModeBanner: false,
       home: LoginPage()

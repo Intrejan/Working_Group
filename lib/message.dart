@@ -16,6 +16,8 @@ class _MessagePage extends State<MessagePage>{
 
   List<Message> _message=[];
 
+  String _model = "0";
+
   @override
   void initState(){
     ///假数据
@@ -51,13 +53,30 @@ class _MessagePage extends State<MessagePage>{
         title: Text("Message"),
         actions: <Widget>[
           new IconButton(icon: Icon(Icons.people,color: Colors.white,),
-            onPressed:(){
+              onPressed:(){
             Navigator.pushNamed(context, "Partners");
             }
           ),
-          new IconButton(icon: Icon(Icons.settings,color: Colors.white,),
-              onPressed: null
-          )
+          new PopupMenuButton(
+            icon: Icon(Icons.settings),
+
+            itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+              new PopupMenuItem<String>(
+                value: "2",child: new Text("全部已读",style: new TextStyle(fontSize: 14)),
+              ),
+              new PopupMenuItem(
+                  value:"1",child: new Text("接受但不提醒",style: new TextStyle(fontSize: 14))
+              ),
+              new PopupMenuItem(
+                  value:"0",child: new Text("接受并提醒",style: new TextStyle(fontSize: 14),)
+              ),
+            ],
+            onSelected: (String value){
+              setState(() {
+                _model = value;
+              });
+            },
+          ),
         ],
 
       ),
@@ -110,39 +129,50 @@ class EachItem extends StatelessWidget{
   Widget build(BuildContext context) {
     return  Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child:  Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(left: 14.0,right: 14.0),
-                child: new CircleAvatar(
-                  backgroundImage: NetworkImage(message.imageUrl),
+        child:  GestureDetector(
+          child:Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.only(left: 14.0,right: 14.0),
+                  child: new CircleAvatar(
+                    backgroundImage: NetworkImage(message.imageUrl),
+                  ),
                 ),
-              ),
-              Flexible(
-                child:  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      new Text(message.userName,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 17.0
-                          )
-                      ),
-                      new Container(
-                        margin: const EdgeInsets.only(top: 5.0),
-                        child: new Text(message.firstMessage,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
+                Flexible(
+                  child:  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        new Text(message.userName,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 17.0
+                            )
                         ),
-                      )
-                    ]
+                        new Container(
+                          margin: const EdgeInsets.only(top: 5.0),
+                          child: new Text(message.firstMessage,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        )
+                      ]
+                  ),
                 ),
-              ),
-            ]
+              ]
+          ) ,
+          onTap: (){
+            Navigator.pushNamed(context,
+                "Chat",
+                arguments: message.userName
+                );
+          },
+          onLongPress: (){
+
+          },
         )
     );
   }
