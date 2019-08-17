@@ -115,17 +115,6 @@ class UserDrawerPage extends StatefulWidget{
               Navigator.pop(context);
             },
           ),
-          ListTile(title: Text('Stars'),
-            leading: new CircleAvatar(
-              child: new Icon(Icons.star),
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-              radius: 18,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
           ListTile(title: Text('Schedule'),
             leading: new CircleAvatar(
               child: new Icon(Icons.schedule),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:working_group/chat.dart';
 
 class Message {
   String userName;
@@ -12,6 +13,7 @@ class MessagePage extends StatefulWidget{
   _MessagePage createState()=>_MessagePage();
 
 }
+
 class _MessagePage extends State<MessagePage>{
 
   List<Message> _message=[];
@@ -109,72 +111,78 @@ class _MessagePage extends State<MessagePage>{
                   separatorBuilder: (BuildContext context, int index) {
                     return divider;
                   },
-                  itemBuilder: (context, index) => EachItem(_message[index]),
+                  itemBuilder: (context, index) => EachItem(_message[index],_message,index),
                 )
             )
           ],
         )
     );
   }
-
 }
-
 
 class EachItem extends StatelessWidget{
 
   final Message message;
-  const EachItem(this.message);
+  final List<Message> _message;
+  final int index;
+  const EachItem(this.message, this._message, this.index);
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child:  GestureDetector(
-          child:Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(left: 14.0,right: 14.0),
-                  child: new CircleAvatar(
-                    backgroundImage: NetworkImage(message.imageUrl),
+    return Dismissible(
+      key: new Key(message.userName),
+      onDismissed: (direction){
+        _message.removeAt(index);
+      },
+      child:Container(
+          margin: const EdgeInsets.symmetric(vertical: 10.0),
+          child:  GestureDetector(
+            child:Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.only(left: 14.0,right: 14.0),
+                    child: new CircleAvatar(
+                      backgroundImage: NetworkImage(message.imageUrl),
+                    ),
                   ),
-                ),
-                Flexible(
-                  child:  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        new Text(message.userName,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 17.0
-                            )
-                        ),
-                        new Container(
-                          margin: const EdgeInsets.only(top: 5.0),
-                          child: new Text(message.firstMessage,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
+                  Flexible(
+                    child:  Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          new Text(message.userName,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 17.0
+                              )
                           ),
-                        )
-                      ]
+                          new Container(
+                            margin: const EdgeInsets.only(top: 5.0),
+                            child: new Text(message.firstMessage,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ]
+                    ),
                   ),
-                ),
-              ]
-          ) ,
-          onTap: (){
-            Navigator.pushNamed(context,
-                "Chat",
-                arguments: message.userName
-                );
-          },
-          onLongPress: (){
-
-          },
-        )
+                ]
+            ) ,
+            onTap: (){
+              Navigator.pushNamed(context,
+                  "Chat",
+                  arguments: new Chatter(message.userName,message.imageUrl)
+              );
+            },
+          )
+      ) ,
     );
   }
+
+
 }
+
 

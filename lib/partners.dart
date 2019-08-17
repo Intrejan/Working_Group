@@ -35,7 +35,17 @@ class _Partners  extends State<Partners>{
   }
 
   searchPartners(String key) {
-
+    List<Partner> _sPartners=[];
+    for(Partner p in _partners){
+      if(p.userName.contains(key)){
+        _sPartners.add(p);
+      }
+    }
+    _partners=_sPartners;
+    if(key.length==0){
+      _partners.clear();
+      initState();
+    }
   }
 
   @override
