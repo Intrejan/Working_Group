@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+///发送的信息类
 class Message {
   String text;
-  bool isSender;
+  bool isSender;//是否自己发送
   Message(this.text, this.isSender,);
 }
 
@@ -39,10 +40,9 @@ class _Chat extends State<Chat>{
 
     setState((){
       _messages.insert(0, message);
-
     });
   }
-
+  ///构造输入框
   Widget _buildTextComposer(){
     return new Container(
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -70,6 +70,8 @@ class _Chat extends State<Chat>{
   @override
   Widget build(BuildContext context) {
 
+    Widget divider = Divider(color: Colors.white, height: 18.0, indent: 18,);
+    ///获得聊天的对象
     Chatter chatter = ModalRoute.of(context).settings.arguments;
     //print(chatter.userName);
 
@@ -82,7 +84,10 @@ class _Chat extends State<Chat>{
       body: new Column(
         children: <Widget>[
           new Flexible(
-              child:new ListView.builder(
+              child:new ListView.separated(
+                separatorBuilder: (BuildContext context, int index) {
+                  return divider;
+                },
                 padding: new EdgeInsets.all(8.0),
                 reverse: true,
                 itemBuilder: (context, int index) => EntryItem(_messages[index],chatter),
@@ -102,12 +107,14 @@ class _Chat extends State<Chat>{
   }
 }
 
+///构造发送的信息
 class EntryItem extends StatelessWidget{
   final Chatter chatter;
   final Message message;
   const EntryItem(this.message,this.chatter);
 
   Widget row(){
+    ///由自己发送，右边显示
     if(message.isSender){
       return new Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -141,6 +148,7 @@ class EntryItem extends StatelessWidget{
       );
     }
     else{
+      ///对方发送，左边显示
       return new Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[

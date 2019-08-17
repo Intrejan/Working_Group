@@ -31,9 +31,8 @@ class _MessagePage extends State<MessagePage>{
     super.initState();
   }
 
+  ///查找的方法
   searchMessage(String key){
-//    _message.clear();
-//    initState();
     List<Message> _sMessage=[];
       for(Message m in _message){
         if(m.userName.contains(key) || m.firstMessage.contains(key)){
@@ -49,7 +48,9 @@ class _MessagePage extends State<MessagePage>{
 
   @override
   Widget build(BuildContext context) {
+    ///分割线
     Widget divider = Divider(color: Colors.black12, height: 1.0, indent: 18,);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Message"),
@@ -120,6 +121,7 @@ class _MessagePage extends State<MessagePage>{
   }
 }
 
+///构造每一个Item的类
 class EachItem extends StatelessWidget{
 
   final Message message;
@@ -130,6 +132,7 @@ class EachItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Dismissible(
+      //key是必须的，而且是String类型
       key: new Key(message.userName),
       onDismissed: (direction){
         _message.removeAt(index);
@@ -172,6 +175,7 @@ class EachItem extends StatelessWidget{
                 ]
             ) ,
             onTap: (){
+              //跳转到聊天界面
               Navigator.pushNamed(context,
                   "Chat",
                   arguments: new Chatter(message.userName,message.imageUrl)
@@ -181,8 +185,6 @@ class EachItem extends StatelessWidget{
       ) ,
     );
   }
-
-
 }
 
 
