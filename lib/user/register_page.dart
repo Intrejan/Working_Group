@@ -48,7 +48,7 @@ class _RegisterState extends State<RegisterPage> {
                 SizedBox(height: 25.0),
                 buildPasswordTextField(context),
                 SizedBox(height: 25.0),
-                bulidConfirmTextField(context),
+                _bulidConfirmTextField(context),
                 SizedBox(height: 60.0,),
                 buildRegisterButton(context),
                 SizedBox(height: 20.0),
@@ -132,7 +132,7 @@ class _RegisterState extends State<RegisterPage> {
     );
   }
 
-  TextFormField bulidConfirmTextField(BuildContext context) {
+  TextFormField _bulidConfirmTextField(BuildContext context) {
     return TextFormField(
       controller: _controllerRePwd,
       onSaved: (String value) => _password_confirm = value,
@@ -188,6 +188,12 @@ class _RegisterState extends State<RegisterPage> {
   save() async{
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(_email,_password);
+    prefs.setString("userName","New user");
+    prefs.setString("background","assets/images/userbg.png");
+    prefs.setString("head","assets/images/user.png");
+    prefs.setString("gender", "请选择");
+    prefs.setString("phoneNumber", "请添加");
+    prefs.setString("address", "请添加");
+    prefs.setString("birthday", "请选择");
   }
-
 }

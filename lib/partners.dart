@@ -131,7 +131,7 @@ class EachItem extends StatelessWidget{
               ]
           ),
           onTap: (){
-            Navigator.pushNamed(context, "SelfPage");
+            //Navigator.pushNamed(context, "SelfPage");
           },
         ),
     );

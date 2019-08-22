@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'package:working_group/user/login_page.dart';
 
@@ -14,7 +16,25 @@ class UserDrawerPage extends StatefulWidget{
 
   _UserPageState(this.userEmail);
   final String userEmail;
-  String userName="New user";
+  String userName="";
+  String background="";
+  String head = "";
+
+  @override
+  void initState(){
+    getUser();
+    super.initState();
+  }
+  ///获取用户
+  getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName = prefs.getString("userName");
+      background = prefs.getString("background");
+      head = prefs.getString("head");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     //print(userEmail);
@@ -31,10 +51,18 @@ class UserDrawerPage extends StatefulWidget{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      new CircleAvatar(
-                        backgroundImage: AssetImage('assets/images/user.png'),
-                        radius: 35.0,
+                      new GestureDetector(
+                        child: new CircleAvatar(
+                          backgroundImage: AssetImage(head),
+                          radius: 35.0,
+                        ),
+                        onTap: (){
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, "SelfPage");
+
+                        },
                       ),
+
                       new Padding(
                         padding: EdgeInsets.symmetric(horizontal: 22.0),
                         child: SizedBox(height: 10),
@@ -69,7 +97,7 @@ class UserDrawerPage extends StatefulWidget{
 //              end: FractionalOffset(0, 0)
 //          ),
           image: new DecorationImage(
-            image: AssetImage("assets/images/userbg.png"),
+            image: AssetImage(background),
             fit: BoxFit.fitHeight,
         )
       ),
@@ -141,6 +169,8 @@ class UserDrawerPage extends StatefulWidget{
       ),
     );
   }
+
+  ///切换账号
   void _showSwitchDialog(BuildContext context) {
     showDialog(
         context: context,
